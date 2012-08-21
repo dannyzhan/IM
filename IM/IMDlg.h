@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "afxwin.h"
 
 // CIMDlg dialog
 class CIMDlg : public CDialog
@@ -28,4 +28,13 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	CString csUserName;
+	CString csPwd;
+	afx_msg void LoginClick();
+
+	CStatic staticLoginMessage;
+private:
+	bool Login(CString &user, CString &pwd);
+	void ShowChatDialog();
 };
