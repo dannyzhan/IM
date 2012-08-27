@@ -5,6 +5,7 @@
 #include "stdafx.h"
 #include "IM.h"
 #include "IMDlg.h"
+#include "UserListPanel.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -64,12 +65,12 @@ BOOL CIMApp::InitInstance()
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	CIMDlg dlg;
-	m_pMainWnd = &dlg;
+	//m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with OK
+        CUserListPanel userList;
+        userList.DoModal();
 	}
 	else if (nResponse == IDCANCEL)
 	{

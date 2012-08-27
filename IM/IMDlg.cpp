@@ -123,5 +123,5 @@ void CIMDlg::ShowChatDialog()
 {
 	// show a debug message
 	staticLoginMessage.SetWindowTextW(_T("DEBUG -- Login successful. trying to show next window"));
-	//OnOK();
+	OnOK();
 }
