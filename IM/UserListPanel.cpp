@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "IM.h"
 #include "UserListPanel.h"
+#include "ChatPanel.h"
 
 
 // CUserListPanel dialog
@@ -74,5 +75,7 @@ void CUserListPanel::OnLbnDblclkListUser()
 {
     CString curUserName;
     m_userList.GetText(m_userList.GetCurSel(), curUserName);
-    MessageBox(_T("Hello,") + curUserName);
+	CString strTitle = CString("Chat with ") + curUserName;
+    CChatPanel chatPanel(curUserName);
+	chatPanel.DoModal();
 }

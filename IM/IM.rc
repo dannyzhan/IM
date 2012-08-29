@@ -37,6 +37,19 @@ BEGIN
     LISTBOX         IDC_LIST_USER,7,7,105,199,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
 END
 
+IDD_CHAT_PANEL DIALOGEX 0, 0, 455, 301
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Chat"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_CHAT_INPUT,7,220,441,48,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
+    EDITTEXT        IDC_CHAT_HISTORY,7,7,441,181,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Font",IDC_BUTTON1,16,196,50,14
+    PUSHBUTTON      "Expression",IDC_BUTTON2,78,196,50,14
+    PUSHBUTTON      "Close",IDC_BTN_CLOSE,315,280,50,14
+    PUSHBUTTON      "Send",IDC_BTN_SEND,384,280,50,14
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -53,6 +66,14 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 206
     END
+
+    IDD_CHAT_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 448
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 294
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
@@ -68,6 +89,46 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_IM_DIALOG DIALOGEX 0, 0, 320, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "IM"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Login",IDOK,122,108,50,14
+    PUSHBUTTON      "Exit",IDCANCEL,121,127,50,14
+    CTEXT           "User Name:",IDC_STATIC,15,30,62,8
+    CTEXT           "Password",IDC_STATIC,21,49,40,8
+    EDITTEXT        IDC_EDIT_UN,74,27,118,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_PWD,74,47,118,14,ES_PASSWORD | ES_AUTOHSCROLL
+    LTEXT           "",IDC_STATIC_MSG,27,73,168,31
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_IM_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 193
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -119,27 +180,6 @@ IDR_MAINFRAME           ICON                    "res\\IM.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Dialog
-//
-
-IDD_IM_DIALOG DIALOGEX 0, 0, 320, 200
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION
-EXSTYLE WS_EX_APPWINDOW
-CAPTION "IM"
-FONT 8, "MS Shell Dlg", 0, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "Login",IDOK,122,108,50,14
-    PUSHBUTTON      "Exit",IDCANCEL,121,127,50,14
-    CTEXT           "User Name:",IDC_STATIC,15,30,62,8
-    CTEXT           "Password",IDC_STATIC,21,49,40,8
-    EDITTEXT        IDC_EDIT_UN,74,27,118,14,ES_AUTOHSCROLL
-    EDITTEXT        IDC_EDIT_PWD,74,47,118,14,ES_PASSWORD | ES_AUTOHSCROLL
-    LTEXT           "",IDC_STATIC_MSG,27,73,168,31
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // Version
 //
 
@@ -175,25 +215,6 @@ BEGIN
         VALUE "Translation", 0x409, 1252
     END
 END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO 
-BEGIN
-    IDD_IM_DIALOG, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 313
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 193
-    END
-END
-#endif    // APSTUDIO_INVOKED
 
 
 /////////////////////////////////////////////////////////////////////////////
