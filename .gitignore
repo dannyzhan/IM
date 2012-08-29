@@ -10,3 +10,6 @@
 *.lai
 *.la
 *.a
+/IM.suo
+/Debug
+/IM.ncb
