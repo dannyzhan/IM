@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "IM.h"
 #include "ChatPanel.h"
+#include "IMSwiften.h"
 
 
 // CChatPanel dialog
@@ -14,6 +15,7 @@ CChatPanel::CChatPanel(CString strUser, CWnd* pParent /*=NULL*/)
 	: CDialog(CChatPanel::IDD, pParent)
 {
 	m_strChatUser = strUser;
+	m_pImCore = new IMSwiften;
 }
 
 CChatPanel::~CChatPanel()
@@ -49,11 +51,24 @@ void CChatPanel::OnBnClickedBtnSend()
 	m_Input.GetWindowText(strMessage);
 	if (!strMessage.IsEmpty())
 	{
-		strMessage += "\r\n";
-		int length = m_ChatHistory.GetWindowTextLength();
-		m_ChatHistory.SetSel(length, length);
-		m_ChatHistory.ReplaceSel(strMessage);
-		m_Input.Clear();
+		if (m_pImCore)
+		{
+			if (m_pImCore->SendTo(m_strChatUser.GetBuffer(0), strMessage.GetBuffer(0)))
+			{
+				strMessage += "\r\n";
+				int length = m_ChatHistory.GetWindowTextLength();
+				m_ChatHistory.SetSel(length, length);
+				m_ChatHistory.ReplaceSel(strMessage);
+				m_Input.Clear();
+			}
+			else
+			{
+				CString msg;
+				msg.Format(_T("Can not send message to %s"), m_strChatUser);
+				MessageBox(msg);
+			}
+		}
+
 	}
 }
 

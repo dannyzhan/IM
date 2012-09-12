@@ -198,6 +198,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMSwiften.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -236,7 +240,15 @@
 				>
 			</File>
 			<File
+				RelativePath=".\IMCore.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IMDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\IMSwiften.h"
 				>
 			</File>
 			<File

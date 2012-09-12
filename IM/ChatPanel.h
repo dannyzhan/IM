@@ -3,7 +3,7 @@
 
 
 // CChatPanel dialog
-
+class IMCore;
 class CChatPanel : public CDialog
 {
 	DECLARE_DYNAMIC(CChatPanel)
@@ -26,6 +26,7 @@ private:
 	CEdit m_Input;
 	CEdit m_ChatHistory;
 	CString m_strChatUser;
+	IMCore *m_pImCore;
 public:
 	virtual BOOL OnInitDialog();
 };
