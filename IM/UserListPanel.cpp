@@ -21,6 +21,16 @@ CUserListPanel::~CUserListPanel()
 {
 }
 
+//void CUserListPanel::SetXMPPInstance(XMPP& _jabber)
+//{
+//	XMPP newJabber(_jabber);
+//
+//	jabber = newJabber;
+//}
+//
+//XMPP GetXMPPInstance();
+//	void SetXMPPInstance(XMPP& _jabber);
+
 void CUserListPanel::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
@@ -44,13 +54,21 @@ BOOL CUserListPanel::OnInitDialog()
     GetClientRect(clientRect);
     m_oldSize = CSize(clientRect.Width(), clientRect.Height());
 
-    const int userCount = 10;
+	 CString username;
+	for(int i =0; i < globalJabber.GetBuddyCount(); i++)
+	{
+		username.Format(_T("%s"), globalJabber.GetBuddyRealName(i));
+        m_userList.AddString(username);
+		
+	}
+
+    /*const int userCount = 10;
     CString username;
     for (int i = 0; i < userCount; ++i)
     {
         username.Format(_T("User %d"), i + 1);
         m_userList.AddString(username);
-    }
+    }*/
 
     return FALSE; 
 }

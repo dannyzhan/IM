@@ -4,6 +4,8 @@
 
 #pragma once
 #include "afxwin.h"
+#include "..//IPWorks//include//ipworks.h"
+#include "IMGlobal.h"
 
 // CIMDlg dialog
 class CIMDlg : public CDialog
@@ -32,9 +34,12 @@ public:
 	CString csUserName;
 	CString csPwd;
 	afx_msg void LoginClick();
+	/*XMPP GetXMPPInstance();
+	void SetXMPPInstance(XMPP& _jabber);*/
 
 	CStatic staticLoginMessage;
 private:
 	bool Login(CString &user, CString &pwd);
 	void ShowChatDialog();
+	
 };

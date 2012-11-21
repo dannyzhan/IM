@@ -3,9 +3,11 @@
 //
 
 #include "stdafx.h"
+#include "IMGlobal.h"
 #include "IM.h"
 #include "IMDlg.h"
 #include "UserListPanel.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -65,11 +67,13 @@ BOOL CIMApp::InitInstance()
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	CIMDlg dlg;
+	
 	//m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
         CUserListPanel userList;
+		//userList.SetXMPPInstance(dlg.GetXMPPInstance());
         userList.DoModal();
 	}
 	else if (nResponse == IDCANCEL)

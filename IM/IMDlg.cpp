@@ -7,6 +7,8 @@
 #include "IMDlg.h"
 #include <string>
 
+
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -15,7 +17,7 @@
 // CIMDlg dialog
 
 
-
+XMPP globalJabber;
 
 CIMDlg::CIMDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CIMDlg::IDD, pParent)
@@ -56,6 +58,15 @@ BOOL CIMDlg::OnInitDialog()
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
+
+//XMPP CIMDlg::GetXMPPInstance()
+//{
+//	XMPP newJabber(jabber);
+//	return newJabber;
+//}
+//
+//XMPP GetXMPPInstance();
+//	void SetXMPPInstance(XMPP& _jabber);
 
 // If you add a minimize button to your dialog, you will need the code below
 //  to draw the icon.  For MFC applications using the document/view model,
@@ -98,12 +109,12 @@ void CIMDlg::LoginClick()
 {
 	// TODO: Add your control notification handler code here
 	//OnOK();
-	staticLoginMessage.SetWindowTextW(_T(""));
+	staticLoginMessage.SetWindowText(_T(""));
 	UpdateData(TRUE);
 
 	if(true != Login(csUserName, csPwd))
 	{
-		staticLoginMessage.SetWindowTextW(_T("Login failed. please check username and password"));
+		staticLoginMessage.SetWindowText(_T("Login failed. please check username and password"));
 	}
 	else
 	{
@@ -114,14 +125,24 @@ void CIMDlg::LoginClick()
 }
 
 bool CIMDlg::Login(CString &user, CString &pwd)
-{
+{	
+	int atIndex = user.Find('@');
+	CString user2 = user.Left(atIndex);
+	CString server = (LPCTSTR)user.Right(user.GetLength() - atIndex-1);
+	LPCTSTR pwd2 = (LPCTSTR)pwd;
+
+	
+
+	globalJabber.SetIMServer(server);
+	
+	int returnCode = globalJabber.Connect(user2, pwd2);
 	// connect server do validation
-	return true;
+	return returnCode == 0;
 }
 
 void CIMDlg::ShowChatDialog()
 {
 	// show a debug message
-	staticLoginMessage.SetWindowTextW(_T("DEBUG -- Login successful. trying to show next window"));
+	staticLoginMessage.SetWindowText(_T("DEBUG -- Login successful. trying to show next window"));
 	OnOK();
 }

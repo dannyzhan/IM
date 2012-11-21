@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "IMGlobal.h"
 
 // CUserListPanel dialog
 
@@ -11,6 +11,8 @@ class CUserListPanel : public CDialog
 public:
 	CUserListPanel(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CUserListPanel();
+	XMPP GetXMPPInstance();
+	void SetXMPPInstance(XMPP& _jabber);
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_USERLIST };
@@ -25,4 +27,7 @@ public:
     afx_msg void OnLbnDblclkListUser();
     CListBox m_userList;
     CSize    m_oldSize;
+
+
+	
 };
