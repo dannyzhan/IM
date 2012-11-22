@@ -51,23 +51,14 @@ void CChatPanel::OnBnClickedBtnSend()
 	m_Input.GetWindowText(strMessage);
 	if (!strMessage.IsEmpty())
 	{
-		if (m_pImCore)
-		{
-			/*if (m_pImCore->SendTo(m_strChatUser.GetBuffer(0), strMessage.GetBuffer(0)))
-			{
-				strMessage += "\r\n";
-				int length = m_ChatHistory.GetWindowTextLength();
-				m_ChatHistory.SetSel(length, length);
-				m_ChatHistory.ReplaceSel(strMessage);
-				m_Input.Clear();
-			}
-			else
-			{
-				CString msg;
-				msg.Format(_T("Can not send message to %s"), m_strChatUser);
-				MessageBox(msg);
-			}*/
-		}
+		globalJabber.SetMessageText(strMessage);
+		globalJabber.SendMessage(m_strChatUser);
+
+		strMessage = "\r\n I said:" + strMessage;
+		int length = m_ChatHistory.GetWindowTextLength();
+		m_ChatHistory.SetSel(length, length);
+		m_ChatHistory.ReplaceSel(strMessage);
+		m_Input.Clear();	
 
 	}
 }

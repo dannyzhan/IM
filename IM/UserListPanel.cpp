@@ -48,28 +48,19 @@ END_MESSAGE_MAP()
 
 BOOL CUserListPanel::OnInitDialog()
 {
-    CDialog::OnInitDialog();
+	CDialog::OnInitDialog();
 
-    CRect clientRect;
-    GetClientRect(clientRect);
-    m_oldSize = CSize(clientRect.Width(), clientRect.Height());
+	CRect clientRect;
+	GetClientRect(clientRect);
+	m_oldSize = CSize(clientRect.Width(), clientRect.Height());
 
-	 CString username;
+	CString username;
 	for(int i =0; i < globalJabber.GetBuddyCount(); i++)
 	{
 		username.Format(_T("%s"), globalJabber.GetBuddyRealName(i));
-        m_userList.AddString(username);
-		
+		m_userList.AddString(username);
 	}
-
-    /*const int userCount = 10;
-    CString username;
-    for (int i = 0; i < userCount; ++i)
-    {
-        username.Format(_T("User %d"), i + 1);
-        m_userList.AddString(username);
-    }*/
-
+   
     return FALSE; 
 }
 

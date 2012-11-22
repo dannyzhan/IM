@@ -72,8 +72,7 @@ BOOL CIMApp::InitInstance()
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-        CUserListPanel userList;
-		//userList.SetXMPPInstance(dlg.GetXMPPInstance());
+        CUserListPanel userList;	
         userList.DoModal();
 	}
 	else if (nResponse == IDCANCEL)

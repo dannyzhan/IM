@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-
+#include "IMGlobal.h"
 
 // CChatPanel dialog
 class IMCore;

@@ -59,15 +59,6 @@ BOOL CIMDlg::OnInitDialog()
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
-//XMPP CIMDlg::GetXMPPInstance()
-//{
-//	XMPP newJabber(jabber);
-//	return newJabber;
-//}
-//
-//XMPP GetXMPPInstance();
-//	void SetXMPPInstance(XMPP& _jabber);
-
 // If you add a minimize button to your dialog, you will need the code below
 //  to draw the icon.  For MFC applications using the document/view model,
 //  this is automatically done for you by the framework.
@@ -131,12 +122,10 @@ bool CIMDlg::Login(CString &user, CString &pwd)
 	CString server = (LPCTSTR)user.Right(user.GetLength() - atIndex-1);
 	LPCTSTR pwd2 = (LPCTSTR)pwd;
 
-	
-
-	globalJabber.SetIMServer(server);
-	
+	// connect to the server to do validation
+	globalJabber.SetIMServer(server);	
 	int returnCode = globalJabber.Connect(user2, pwd2);
-	// connect server do validation
+	
 	return returnCode == 0;
 }
 

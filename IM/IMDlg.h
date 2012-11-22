@@ -34,8 +34,6 @@ public:
 	CString csUserName;
 	CString csPwd;
 	afx_msg void LoginClick();
-	/*XMPP GetXMPPInstance();
-	void SetXMPPInstance(XMPP& _jabber);*/
 
 	CStatic staticLoginMessage;
 private:
