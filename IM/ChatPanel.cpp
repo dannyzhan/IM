@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "IM.h"
 #include "ChatPanel.h"
-//#include "IMSwiften.h"
+#include "IMProtocol.h"
 
 
 // CChatPanel dialog
@@ -15,7 +15,6 @@ CChatPanel::CChatPanel(CString strUser, CWnd* pParent /*=NULL*/)
 	: CDialog(CChatPanel::IDD, pParent)
 {
 	m_strChatUser = strUser;
-	//m_pImCore = new IMSwiften;
 }
 
 CChatPanel::~CChatPanel()
@@ -33,6 +32,7 @@ void CChatPanel::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CChatPanel, CDialog)
 	ON_BN_CLICKED(IDC_BTN_CLOSE, &CChatPanel::OnBnClickedBtnClose)
 	ON_BN_CLICKED(IDC_BTN_SEND, &CChatPanel::OnBnClickedBtnSend)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -51,14 +51,21 @@ void CChatPanel::OnBnClickedBtnSend()
 	m_Input.GetWindowText(strMessage);
 	if (!strMessage.IsEmpty())
 	{
-		globalJabber.SetMessageText(strMessage);
-		globalJabber.SendMessage(m_strChatUser);
-
-		strMessage = "\r\n I said:" + strMessage;
-		int length = m_ChatHistory.GetWindowTextLength();
-		m_ChatHistory.SetSel(length, length);
-		m_ChatHistory.ReplaceSel(strMessage);
-		m_Input.Clear();	
+		CIMApp* app = (CIMApp*)::AfxGetApp();
+		if (app->Client())
+		{
+			if (app->Client()->SendMessage(strMessage.GetBuffer(0), m_strChatUser.GetBuffer(0)))
+			{
+				AppendChatHistory(strMessage, "I");
+				m_Input.Clear();
+			}
+			else
+			{
+				CString msg;
+				msg.Format(_T("Can not send message to %s"), m_strChatUser);
+				MessageBox(msg);
+			}
+		}
 
 	}
 }
@@ -73,4 +80,28 @@ BOOL CChatPanel::OnInitDialog()
 	m_Input.SetFocus();
 	return TRUE;  // return TRUE unless you set the focus to a control
 	// EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CChatPanel::MessageIn(CString strMessage)
+{
+	AppendChatHistory(strMessage, m_strChatUser);
+}
+
+void CChatPanel::AppendChatHistory(CString strMessage, CString strUser)
+{
+	CTime currentTime = CTime::GetCurrentTime();
+	CString strTime = currentTime.Format("%H:%M:%S") + " ";
+	CString formatMsg = strTime + strUser + CString(" says: ") + strMessage + "\r\n";
+	int length = m_ChatHistory.GetWindowTextLength();
+	m_ChatHistory.SetSel(length, length);
+	m_ChatHistory.ReplaceSel(formatMsg);
+}
+
+void CChatPanel::OnClose()
+{
+	// TODO: Add your message handler code here and/or call default
+
+	CDialog::OnClose();
+	CUserListPanel* userListPanel = (CUserListPanel*)GetParent();
+	userListPanel->CloseChatWindow(m_strChatUser);
 }

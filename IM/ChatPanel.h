@@ -1,6 +1,6 @@
 #pragma once
 #include "afxwin.h"
-#include "IMGlobal.h"
+
 
 // CChatPanel dialog
 class IMCore;
@@ -26,7 +26,9 @@ private:
 	CEdit m_Input;
 	CEdit m_ChatHistory;
 	CString m_strChatUser;
-	IMCore *m_pImCore;
 public:
 	virtual BOOL OnInitDialog();
+	void MessageIn(CString strMessage);
+	void AppendChatHistory(CString strMessage, CString strUser);
+	afx_msg void OnClose();
 };

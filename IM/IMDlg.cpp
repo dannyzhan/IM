@@ -5,9 +5,8 @@
 #include "stdafx.h"
 #include "IM.h"
 #include "IMDlg.h"
+#include "IMProtocol.h"
 #include <string>
-
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,7 +16,7 @@
 // CIMDlg dialog
 
 
-XMPP globalJabber;
+
 
 CIMDlg::CIMDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CIMDlg::IDD, pParent)
@@ -116,22 +115,20 @@ void CIMDlg::LoginClick()
 }
 
 bool CIMDlg::Login(CString &user, CString &pwd)
-{	
-	int atIndex = user.Find('@');
-	CString user2 = user.Left(atIndex);
-	CString server = (LPCTSTR)user.Right(user.GetLength() - atIndex-1);
-	LPCTSTR pwd2 = (LPCTSTR)pwd;
-
-	// connect to the server to do validation
-	globalJabber.SetIMServer(server);	
-	int returnCode = globalJabber.Connect(user2, pwd2);
-	
-	return returnCode == 0;
+{
+	// connect server do validation
+	bool ret = false;
+	CIMApp* app = (CIMApp*)::AfxGetApp();
+	if (app->Client()) {
+		ret = app->Client()->Logon((LPCTSTR)user, (LPCTSTR)pwd, "npg", 5222);
+	}
+	return ret;
 }
 
 void CIMDlg::ShowChatDialog()
 {
 	// show a debug message
-	staticLoginMessage.SetWindowText(_T("DEBUG -- Login successful. trying to show next window"));
-	OnOK();
+	ShowWindow(SW_HIDE);
+	CIMApp* app = (CIMApp*)::AfxGetApp();
+	app->ShowUserList();
 }

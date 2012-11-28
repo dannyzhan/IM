@@ -3,11 +3,10 @@
 //
 
 #include "stdafx.h"
-#include "IMGlobal.h"
 #include "IM.h"
 #include "IMDlg.h"
 #include "UserListPanel.h"
-
+#include "IMProtocol.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -24,6 +23,7 @@ END_MESSAGE_MAP()
 // CIMApp construction
 
 CIMApp::CIMApp()
+: m_pClient(NULL)
 {
 	// TODO: add construction code here,
 	// Place all significant initialization in InitInstance
@@ -34,7 +34,8 @@ CIMApp::CIMApp()
 
 CIMApp theApp;
 
-
+extern IMProtocol* Create();
+extern void Destroy(IMProtocol*);
 // CIMApp initialization
 
 BOOL CIMApp::InitInstance()
@@ -66,22 +67,83 @@ BOOL CIMApp::InitInstance()
 	// such as the name of your company or organization
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
+	m_hExit = CreateEvent(NULL, FALSE, FALSE, NULL);
+	m_pClient = Create();
+	m_pClient->EventHandler(this);
 	CIMDlg dlg;
-	
-	//m_pMainWnd = &dlg;
+	m_pUserList = new CUserListPanel;
+	m_pUserList->Create(CUserListPanel::IDD, &dlg);
+	m_pMainWnd = &dlg;
 	INT_PTR nResponse = dlg.DoModal();
 	if (nResponse == IDOK)
 	{
-        CUserListPanel userList;	
-        userList.DoModal();
+
 	}
 	else if (nResponse == IDCANCEL)
 	{
 		// TODO: Place code here to handle when the dialog is
 		//  dismissed with Cancel
 	}
-
+	delete m_pUserList;
+	Destroy(m_pClient);
 	// Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pump.
 	return FALSE;
+}
+
+IMProtocol* CIMApp::Client(void)
+{
+	return m_pClient;
+}
+
+void CIMApp::UpdateBuddyList(IMEvent* event)
+{
+	if (m_pUserList)
+	{
+		m_pUserList->UpdateBuddy(event);
+	}
+}
+
+void CIMApp::UpdateBuddyState(IMEvent* event) 
+{
+	if (m_pUserList)
+	{
+		m_pUserList->UpdateBuddy(event);
+	}
+}
+
+void CIMApp::UpdateMessage(IMEvent* event)
+{
+	if (m_pUserList)
+	{
+		m_pUserList->UpdateMessage(event);
+	}
+}
+
+bool CIMApp::Handler(IMEvent *event)
+{
+	if (event->Type() == IMEvent::kPresence) 
+	{
+		UpdateBuddyState(event);
+	}
+	else if (event->Type() == IMEvent::kSync) 
+	{
+		UpdateBuddyList(event);
+	}
+	else if (event->Type() == IMEvent::kMessageIn)
+	{
+		UpdateMessage(event);
+	}
+	EventFactory<IMEvent>::DEL(event);
+	return true;
+}
+
+void CIMApp::ShowUserList()
+{
+	m_pUserList->ShowWindow(SW_SHOW);
+}
+
+void CIMApp::ExitApp()
+{
+	m_pMainWnd->DestroyWindow();
 }

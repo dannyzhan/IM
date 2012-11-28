@@ -21,16 +21,6 @@ CUserListPanel::~CUserListPanel()
 {
 }
 
-//void CUserListPanel::SetXMPPInstance(XMPP& _jabber)
-//{
-//	XMPP newJabber(_jabber);
-//
-//	jabber = newJabber;
-//}
-//
-//XMPP GetXMPPInstance();
-//	void SetXMPPInstance(XMPP& _jabber);
-
 void CUserListPanel::DoDataExchange(CDataExchange* pDX)
 {
     CDialog::DoDataExchange(pDX);
@@ -41,6 +31,7 @@ void CUserListPanel::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CUserListPanel, CDialog)
     ON_WM_SIZE()
     ON_LBN_DBLCLK(IDC_LIST_USER, &CUserListPanel::OnLbnDblclkListUser)
+	ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 
@@ -48,19 +39,20 @@ END_MESSAGE_MAP()
 
 BOOL CUserListPanel::OnInitDialog()
 {
-	CDialog::OnInitDialog();
+    CDialog::OnInitDialog();
 
-	CRect clientRect;
-	GetClientRect(clientRect);
-	m_oldSize = CSize(clientRect.Width(), clientRect.Height());
+    CRect clientRect;
+    GetClientRect(clientRect);
+    m_oldSize = CSize(clientRect.Width(), clientRect.Height());
 
-	CString username;
-	for(int i =0; i < globalJabber.GetBuddyCount(); i++)
-	{
-		username.Format(_T("%s"), globalJabber.GetBuddyRealName(i));
-		m_userList.AddString(username);
-	}
-   
+//     const int userCount = 10;
+//     CString username;
+//     for (int i = 0; i < userCount; ++i)
+//     {
+//         username.Format(_T("User %d"), i + 1);
+//         m_userList.AddString(username);
+//     }
+
     return FALSE; 
 }
 
@@ -85,6 +77,75 @@ void CUserListPanel::OnLbnDblclkListUser()
     CString curUserName;
     m_userList.GetText(m_userList.GetCurSel(), curUserName);
 	CString strTitle = CString("Chat with ") + curUserName;
-    CChatPanel chatPanel(curUserName);
-	chatPanel.DoModal();
+    CChatPanel* chatPanel = new CChatPanel(curUserName);
+	chatPanel->Create(CChatPanel::IDD, this);
+	chatPanel->ShowWindow(SW_SHOW);
+	m_userList.SetItemData(m_userList.GetCurSel(), (DWORD_PTR)chatPanel);
+}
+
+void CUserListPanel::UpdateBuddy(IMEvent* event)
+{
+	if (event->Type() == IMEvent::kSync)
+	{
+		IMEventSync* ev = (IMEventSync*)event;
+		std::vector<Buddy>::iterator buddy;
+		for (buddy = ev->Buddies.begin(); buddy != ev->Buddies.end(); ++buddy)
+		{
+			if (m_userList.FindString(-1, buddy->Jid.c_str()) == -1)
+			{
+				m_userList.AddString(buddy->Jid.c_str());
+			}
+		}
+	}
+	else if (event->Type() == IMEvent::kPresence)
+	{
+	}
+}
+
+void CUserListPanel::OnClose()
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnClose();
+	CIMApp* app = (CIMApp*)::AfxGetApp();
+	app->ExitApp();
+}
+
+void CUserListPanel::UpdateMessage(IMEvent* event)
+{
+	IMEventMessage* ev = (IMEventMessage*)event;
+	CString userName = ev->From.c_str();
+	int index = m_userList.FindString(-1, userName);
+	if (index != -1)
+	{
+		CChatPanel* chatChanel = NULL;
+		DWORD_PTR itemData = m_userList.GetItemData(index);
+		if (itemData) 
+		{
+			chatChanel = (CChatPanel*)itemData;
+		}
+		else
+		{
+			chatChanel = new CChatPanel(userName);
+			chatChanel->Create(CChatPanel::IDD, this);
+			chatChanel->ShowWindow(SW_SHOW);
+		}
+		if (chatChanel)
+		{
+			chatChanel->MessageIn(ev->MessageText.c_str());
+		}
+	}
+}
+
+void CUserListPanel::CloseChatWindow(CString strUser)
+{
+	int index = m_userList.FindString(-1, strUser);
+	if (index != -1)
+	{
+		DWORD_PTR itemData = m_userList.GetItemData(index);
+		if (itemData) 
+		{
+			delete (CChatPanel*)itemData;
+			m_userList.SetItemData(index, NULL);
+		}
+	}
 }
