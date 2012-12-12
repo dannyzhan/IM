@@ -57,7 +57,7 @@ void CChatPanel::OnBnClickedBtnSend()
 			if (app->Client()->SendMessage(strMessage.GetBuffer(0), m_strChatUser.GetBuffer(0)))
 			{
 				AppendChatHistory(strMessage, "I");
-				m_Input.Clear();
+				m_Input.SetWindowText("");
 			}
 			else
 			{
@@ -93,6 +93,7 @@ void CChatPanel::AppendChatHistory(CString strMessage, CString strUser)
 	CString strTime = currentTime.Format("%H:%M:%S") + " ";
 	CString formatMsg = strTime + strUser + CString(" says: ") + strMessage + "\r\n";
 	int length = m_ChatHistory.GetWindowTextLength();
+	m_ChatHistory.GetDC()->SetTextColor(RGB(255, 0, 0));
 	m_ChatHistory.SetSel(length, length);
 	m_ChatHistory.ReplaceSel(formatMsg);
 }
