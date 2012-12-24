@@ -1,5 +1,6 @@
 #pragma once
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CChatPanel dialog
@@ -22,13 +23,20 @@ protected:
 public:
 	afx_msg void OnBnClickedBtnClose();
 	afx_msg void OnBnClickedBtnSend();
-private:
-	CEdit m_Input;
-	CEdit m_ChatHistory;
-	CString m_strChatUser;
+
 public:
 	virtual BOOL OnInitDialog();
 	void MessageIn(CString strMessage);
 	void AppendChatHistory(CString strMessage, CString strUser);
 	afx_msg void OnClose();
+private:
+	CString m_strChatUser;
+	CRichEditCtrl m_ChatHistory;
+	CHARFORMAT2 m_ChatFontFormat;
+	CHARFORMAT2 m_ChatFontFormatBk;
+public:
+	CButton m_btnChatFont;
+	afx_msg void OnBnClickedBtnFont();
+private:
+	CRichEditCtrl m_Input;
 };

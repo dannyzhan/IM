@@ -11,11 +11,11 @@
 // Windows Header Files:
 #include <windows.h>
 
+
+
+// TODO: reference additional headers your program requires here
 #ifdef XMPP_IP_WORKS_EXPORTS
 #define XMPP_API __declspec(dllexport)
 #else
 #define XMPP_API __declspec(dllimport)
 #endif
-
-
-// TODO: reference additional headers your program requires here

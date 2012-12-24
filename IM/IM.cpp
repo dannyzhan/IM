@@ -40,6 +40,7 @@ extern void Destroy(IMProtocol*);
 
 BOOL CIMApp::InitInstance()
 {
+//TODO: call AfxInitRichEdit2() to initialize richedit2 library.
 	// InitCommonControlsEx() is required on Windows XP if an application
 	// manifest specifies use of ComCtl32.dll version 6 or later to enable
 	// visual styles.  Otherwise, any window creation will fail.
@@ -49,7 +50,7 @@ BOOL CIMApp::InitInstance()
 	// in your application.
 	InitCtrls.dwICC = ICC_WIN95_CLASSES;
 	InitCommonControlsEx(&InitCtrls);
-
+	AfxInitRichEdit2();
 	CWinAppEx::InitInstance();
 
 	if (!AfxSocketInit())

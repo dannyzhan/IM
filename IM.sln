@@ -3,10 +3,12 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IM", "IM\IM.vcproj", "{A484211E-0C2E-4C6E-AB4F-ED31B65E69AA}"
 	ProjectSection(ProjectDependencies) = postProject
-		{256E2746-5460-4F49-944F-4C5EB53D9852} = {256E2746-5460-4F49-944F-4C5EB53D9852}
+		{7B7E82D9-53C9-4DDD-B809-43FE239C51F2} = {7B7E82D9-53C9-4DDD-B809-43FE239C51F2}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xmpp_ip_works", "xmpp_ip_works\xmpp_ip_works.vcproj", "{256E2746-5460-4F49-944F-4C5EB53D9852}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "xmpp_dummy", "xmpp_dummy\xmpp_dummy.vcproj", "{7B7E82D9-53C9-4DDD-B809-43FE239C51F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +24,10 @@ Global
 		{256E2746-5460-4F49-944F-4C5EB53D9852}.Debug|Win32.Build.0 = Debug|Win32
 		{256E2746-5460-4F49-944F-4C5EB53D9852}.Release|Win32.ActiveCfg = Release|Win32
 		{256E2746-5460-4F49-944F-4C5EB53D9852}.Release|Win32.Build.0 = Release|Win32
+		{7B7E82D9-53C9-4DDD-B809-43FE239C51F2}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7B7E82D9-53C9-4DDD-B809-43FE239C51F2}.Debug|Win32.Build.0 = Debug|Win32
+		{7B7E82D9-53C9-4DDD-B809-43FE239C51F2}.Release|Win32.ActiveCfg = Release|Win32
+		{7B7E82D9-53C9-4DDD-B809-43FE239C51F2}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
