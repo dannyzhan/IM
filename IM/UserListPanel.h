@@ -1,8 +1,14 @@
 #pragma once
 #include "afxwin.h"
 
+#include <map>
+
 
 // CUserListPanel dialog
+namespace Swift
+{
+    class JID;
+}
 
 class CUserListPanel : public CDialog
 {
@@ -11,6 +17,8 @@ class CUserListPanel : public CDialog
 public:
 	CUserListPanel(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CUserListPanel();
+
+    void AddJID(Swift::JID& jid, std::string& name);
 
 // Dialog Data
 	enum { IDD = IDD_DIALOG_USERLIST };
@@ -29,4 +37,7 @@ public:
 	void UpdateMessage(IMEvent* event);
 	void CloseChatWindow(CString strUser);
 	afx_msg void OnClose();
+
+private:
+    std::map<Swift::JID, std::string> m_rosterMap;
 };

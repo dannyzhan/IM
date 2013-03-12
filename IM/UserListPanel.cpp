@@ -6,6 +6,10 @@
 #include "UserListPanel.h"
 #include "ChatPanel.h"
 
+#include "Swiften.h"
+
+#include <algorithm>
+
 
 // CUserListPanel dialog
 
@@ -45,14 +49,6 @@ BOOL CUserListPanel::OnInitDialog()
     GetClientRect(clientRect);
     m_oldSize = CSize(clientRect.Width(), clientRect.Height());
 
-//     const int userCount = 10;
-//     CString username;
-//     for (int i = 0; i < userCount; ++i)
-//     {
-//         username.Format(_T("User %d"), i + 1);
-//         m_userList.AddString(username);
-//     }
-
     return FALSE; 
 }
 
@@ -76,7 +72,6 @@ void CUserListPanel::OnLbnDblclkListUser()
 {
     CString curUserName;
     m_userList.GetText(m_userList.GetCurSel(), curUserName);
-	CString strTitle = CString("Chat with ") + curUserName;
     CChatPanel* chatPanel = new CChatPanel(curUserName);
 	chatPanel->Create(CChatPanel::IDD, this);
 	chatPanel->ShowWindow(SW_SHOW);
@@ -148,4 +143,33 @@ void CUserListPanel::CloseChatWindow(CString strUser)
 			m_userList.SetItemData(index, NULL);
 		}
 	}
+}
+
+void CUserListPanel::AddJID(Swift::JID& jid, std::string& name)
+{
+    bool exist = false;
+    std::map<Swift::JID, std::string>::iterator itr = m_rosterMap.begin();
+    for (; itr != m_rosterMap.end(); ++itr)
+    {
+       if (itr->first == jid) 
+       {
+           exist = true; 
+           break;
+       }
+    }
+
+    if (!exist)
+    {
+        m_userList.AddString(name.c_str());
+        m_rosterMap[jid] = name;
+    }
+
+//     m_rosterMap[jid] = name;
+//     std::map<Swift::JID, std::string>::iterator itrS = m_rosterMap.begin();
+//     std::map<Swift::JID, std::string>::iterator itrE = m_rosterMap.end();
+//     std::map<Swift::JID, std::string>::iterator find = std::find(itrS, itrE, 100);
+//     if (find != NULL)
+//     {
+// 
+//     }
 }

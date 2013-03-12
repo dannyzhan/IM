@@ -22,7 +22,7 @@
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfMFC="2"
-			CharacterSet="0"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -45,6 +45,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="../include"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_DEBUG"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -67,7 +68,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="Swiften.lib Swiften_IDN.lib Swiften_Z.lib Swiften_Expat.lib crypt32.lib dnsapi.lib iphlpapi.lib ws2_32.lib wsock32.lib Advapi32.lib libeay32MD.lib ssleay32MD.lib Kernel32.lib Psapi.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="../lib;../lib\3rdParty\Boost;../lib\3rdParty\Expat;../lib\3rdParty\LibIDN;../lib\3rdParty\ZLib;&quot;C:\OpenSSL-Win32\lib\VC&quot;"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
@@ -198,6 +201,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\MsgReactor.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -232,6 +239,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\Event.h"
+				>
+			</File>
+			<File
 				RelativePath=".\IM.h"
 				>
 			</File>
@@ -245,6 +256,10 @@
 			</File>
 			<File
 				RelativePath=".\IMSwiften.h"
+				>
+			</File>
+			<File
+				RelativePath=".\MsgReactor.h"
 				>
 			</File>
 			<File
@@ -282,6 +297,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\ClassDiagram1.cd"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>

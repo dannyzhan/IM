@@ -5,6 +5,7 @@
 #include "IM.h"
 #include "ChatPanel.h"
 #include "IMProtocol.h"
+#include "UserListPanel.h"
 
 
 // CChatPanel dialog

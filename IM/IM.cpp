@@ -7,6 +7,11 @@
 #include "IMDlg.h"
 #include "UserListPanel.h"
 #include "IMProtocol.h"
+#include "MainFrame.h"
+#include "Event.h"
+#include "MsgReactor.h"
+
+#include <boost/thread/thread.hpp>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -17,6 +22,10 @@
 
 BEGIN_MESSAGE_MAP(CIMApp, CWinAppEx)
 	ON_COMMAND(ID_HELP, &CWinApp::OnHelp)
+    ON_THREAD_MESSAGE(EVT_USER_LOGIN, &CIMApp::OnLogin)
+    ON_THREAD_MESSAGE(EVT_CONNECTED, &CIMApp::OnConnected)
+    ON_THREAD_MESSAGE(EVT_DISCONNECTED, &CIMApp::OnDisConnected)
+    ON_THREAD_MESSAGE(EVT_ROSTER_ADD_JID, &CIMApp::OnJIDAdded)
 END_MESSAGE_MAP()
 
 
@@ -69,27 +78,42 @@ BOOL CIMApp::InitInstance()
 	SetRegistryKey(_T("Local AppWizard-Generated Applications"));
 
 	m_hExit = CreateEvent(NULL, FALSE, FALSE, NULL);
-	m_pClient = Create();
-	m_pClient->EventHandler(this);
-	CIMDlg dlg;
-	m_pUserList = new CUserListPanel;
-	m_pUserList->Create(CUserListPanel::IDD, &dlg);
-	m_pMainWnd = &dlg;
-	INT_PTR nResponse = dlg.DoModal();
-	if (nResponse == IDOK)
-	{
 
-	}
-	else if (nResponse == IDCANCEL)
-	{
-		// TODO: Place code here to handle when the dialog is
-		//  dismissed with Cancel
-	}
-	delete m_pUserList;
-	Destroy(m_pClient);
+//     CMainFrame *pFrame = new CMainFrame;
+//     if (!pFrame->Create(NULL, _T("IM")))
+//         return FALSE;
+//     pFrame->ShowWindow(SW_HIDE);
+//     pFrame->UpdateWindow();
+//     m_pMainWnd = pFrame;
+    m_pLoginDlg = new CIMDlg;
+    if (!m_pLoginDlg->Create(CIMDlg::IDD, NULL))
+        return FALSE;
+
+    m_pMainWnd = m_pLoginDlg;
+    m_pLoginDlg->ShowWindow(SW_SHOW);
+    return TRUE;
+
+// 	m_pClient = Create();
+// 	m_pClient->EventHandler(this);
+// 	CIMDlg dlg;
+// 	m_pUserList = new CUserListPanel;
+// 	m_pUserList->Create(CUserListPanel::IDD, &dlg);
+// 	m_pMainWnd = &dlg;
+// 	INT_PTR nResponse = dlg.DoModal();
+// 	if (nResponse == IDOK)
+// 	{
+// 
+// 	}
+// 	else if (nResponse == IDCANCEL)
+// 	{
+// 		// TODO: Place code here to handle when the dialog is
+// 		//  dismissed with Cancel
+// 	}
+// 	delete m_pUserList;
+// 	Destroy(m_pClient);
 	// Since the dialog has been closed, return FALSE so that we exit the
 	//  application, rather than start the application's message pump.
-	return FALSE;
+	//return FALSE;
 }
 
 IMProtocol* CIMApp::Client(void)
@@ -147,4 +171,37 @@ void CIMApp::ShowUserList()
 void CIMApp::ExitApp()
 {
 	m_pMainWnd->DestroyWindow();
+}
+
+void CIMApp::OnLogin(WPARAM wparam, LPARAM lparam)
+{
+    std::string username = m_pLoginDlg->getUserName();
+    std::string password = m_pLoginDlg->getPassword();
+    boost::thread msgThread(XMPPMsgReactor(username, password));
+    msgThread.timed_join(boost::posix_time::seconds(1));
+}
+
+void CIMApp::OnConnected(WPARAM wparam, LPARAM lparam)
+{
+    m_pLoginDlg->ShowWindow(SW_HIDE);
+
+    m_pUserList = new CUserListPanel;
+    m_pUserList->Create(CUserListPanel::IDD);
+    m_pUserList->SetWindowText(m_pLoginDlg->getUserName().c_str());
+    m_pMainWnd = m_pUserList;
+    m_pUserList->ShowWindow(SW_SHOW);
+}
+
+void CIMApp::OnDisConnected(WPARAM wparam, LPARAM lparam)
+{
+    AfxMessageBox(_T("Your input is incorrect, please input again!"));
+
+    m_pLoginDlg->reset();
+}
+
+void CIMApp::OnJIDAdded(WPARAM wparam, LPARAM lparam)
+{
+    Swift::JID* jid = (Swift::JID*)(wparam);
+    std::string* nickname = (std::string*)(lparam);
+    m_pUserList->AddJID(*jid, *nickname);
 }

@@ -10,12 +10,13 @@
 
 #include "resource.h"		// main symbols
 #include "IMProtocol.h"
-#include "UserListPanel.h"
 
 // CIMApp:
 // See IM.cpp for the implementation of this class
 //
 
+class CIMDlg;
+class CUserListPanel;
 class CIMApp : public CWinAppEx, IMEventHandler
 {
 public:
@@ -30,6 +31,7 @@ public:
 	DECLARE_MESSAGE_MAP()
 private:
 	IMProtocol* m_pClient;
+    CIMDlg*     m_pLoginDlg;
 	CUserListPanel* m_pUserList;
 	HANDLE m_hExit;
 public:
@@ -40,6 +42,11 @@ public:
 	void UpdateBuddyState(IMEvent* event);
 	void UpdateMessage(IMEvent* event);
 	virtual bool Handler(IMEvent *event);
+
+    afx_msg void OnLogin( WPARAM, LPARAM );
+    afx_msg void OnConnected(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnDisConnected(WPARAM wParam, LPARAM lParam);
+    afx_msg void OnJIDAdded(WPARAM wParam, LPARAM lParam);
 };
 
 extern CIMApp theApp;

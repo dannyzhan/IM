@@ -7,6 +7,7 @@
 #include "IMDlg.h"
 #include "IMProtocol.h"
 #include <string>
+#include "Event.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -14,10 +15,6 @@
 
 
 // CIMDlg dialog
-
-
-
-
 CIMDlg::CIMDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CIMDlg::IDD, pParent)
 	, csUserName(_T(""))
@@ -31,7 +28,6 @@ void CIMDlg::DoDataExchange(CDataExchange* pDX)
 	CDialog::DoDataExchange(pDX);
 	DDX_Text(pDX, IDC_EDIT_UN, csUserName);
 	DDX_Text(pDX, IDC_EDIT_PWD, csPwd);
-	DDX_Control(pDX, IDC_STATIC_MSG, staticLoginMessage);
 }
 
 BEGIN_MESSAGE_MAP(CIMDlg, CDialog)
@@ -39,6 +35,9 @@ BEGIN_MESSAGE_MAP(CIMDlg, CDialog)
 	ON_WM_QUERYDRAGICON()
 	//}}AFX_MSG_MAP
 	ON_BN_CLICKED(IDOK, &CIMDlg::LoginClick)
+    ON_MESSAGE(EVT_CONNECTED, &CIMDlg::handleConnected)
+    ON_MESSAGE(EVT_DISCONNECTED, &CIMDlg::handleDisConnected)
+    
 END_MESSAGE_MAP()
 
 
@@ -99,36 +98,59 @@ void CIMDlg::LoginClick()
 {
 	// TODO: Add your control notification handler code here
 	//OnOK();
-	staticLoginMessage.SetWindowText(_T(""));
 	UpdateData(TRUE);
 
-	if(true != Login(csUserName, csPwd))
-	{
-		staticLoginMessage.SetWindowText(_T("Login failed. please check username and password"));
-	}
-	else
-	{
-		// show next dialog
-		ShowChatDialog();
-	}
-
+    
+    AfxGetApp()->PostThreadMessage(EVT_USER_LOGIN, 0, 0);
 }
 
-bool CIMDlg::Login(CString &user, CString &pwd)
+LRESULT CIMDlg::handleConnected(WPARAM wParam, LPARAM lParam)
 {
-	// connect server do validation
-	bool ret = false;
-	CIMApp* app = (CIMApp*)::AfxGetApp();
-	if (app->Client()) {
-		ret = app->Client()->Logon((LPCTSTR)user, (LPCTSTR)pwd, "npg", 5222);
-	}
-	return ret;
+    // Connect successfully
+    ShowWindow(SW_HIDE);
+    CIMApp* app = (CIMApp*)::AfxGetApp();
+    app->ShowUserList();
+    return 0;
 }
 
-void CIMDlg::ShowChatDialog()
+LRESULT CIMDlg::handleDisConnected(WPARAM wParam, LPARAM lParam)
 {
-	// show a debug message
-	ShowWindow(SW_HIDE);
-	CIMApp* app = (CIMApp*)::AfxGetApp();
-	app->ShowUserList();
+    // Failed to connect to server
+    AfxMessageBox(_T("Wrong user name or password, please retry again!"));
+
+    csUserName = _T("");
+    csPwd = _T("");
+    UpdateData(FALSE);
+
+    return 0;
+}
+
+void CIMDlg::OnCancel()
+{
+    DestroyWindow();
+}
+
+void CIMDlg::PostNcDestroy()
+{
+    CDialog::PostNcDestroy();
+    delete this;
+}
+
+std::string CIMDlg::getUserName()
+{
+    return (LPTSTR)(LPCTSTR)csUserName;
+}
+
+std::string CIMDlg::getPassword()
+{
+    return (LPTSTR)(LPCTSTR)csPwd;
+}
+
+void CIMDlg::reset()
+{
+    csUserName = _T("");
+    csPwd = _T("");
+    UpdateData(FALSE);
+
+    GetDlgItem(IDC_EDIT_UN)->SetFocus();
 }
